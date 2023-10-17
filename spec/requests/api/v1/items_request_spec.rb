@@ -17,8 +17,9 @@ describe "Items API" do
 
     items[:data].each do |item|
       expect(item).to have_key(:id)
-      expect(item[:type]).to eq("item")
       expect(item[:id]).to be_an(String)
+      
+      expect(item[:type]).to eq("item")
 
       expect(item[:attributes]).to have_key(:name)
       expect(item[:attributes][:name]).to be_a(String)
@@ -45,9 +46,10 @@ describe "Items API" do
     expect(response).to be_successful
 
     expect(item[:data]).to have_key(:id)
-    expect(item[:data][:type]).to eq("item")
     expect(item[:data][:id]).to be_an(String)
-
+    
+    expect(item[:data][:type]).to eq("item")
+    
     expect(item[:data][:attributes]).to have_key(:name)
     expect(item[:data][:attributes][:name]).to be_a(String)
 
@@ -110,8 +112,8 @@ describe "Items API" do
   end
 
   it "can get the merchant data for a given item ID" do
-    merchant = create(:merchant)
-    item = create(:item, merchant: merchant)
+    merchant_1 = create(:merchant)
+    item = create(:item, merchant: merchant_1)
 
     get "/api/v1/items/#{item.id}/merchant"
 
@@ -119,12 +121,14 @@ describe "Items API" do
 
     expect(response).to be_successful
 
-    expect(merchant).to have_key(:id)
-    expect(merchant[:id]).to be_an(Integer)
-    expect(merchant[:id]).to eq(merchant[:id])
+    expect(merchant[:data]).to have_key(:id)
+    expect(merchant[:data][:id]).to be_an(String)
+    expect(merchant[:data][:id]).to eq("#{merchant_1[:id]}")
+    
+    expect(merchant[:data][:type]).to eq("merchant")
 
-    expect(merchant).to have_key(:name)
-    expect(merchant[:name]).to be_a(String)
-    expect(merchant[:name]).to eq(merchant[:name])
+    expect(merchant[:data][:attributes]).to have_key(:name)
+    expect(merchant[:data][:attributes][:name]).to be_a(String)
+    expect(merchant[:data][:attributes][:name]).to eq(merchant_1[:name])
   end
 end
