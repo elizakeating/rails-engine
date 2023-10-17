@@ -26,9 +26,9 @@ describe "Merchants API" do
 
     get "/api/v1/merchants/#{id}"
 
-    merchant = JSON.parse(response.body, symbolize_names: true)
-
     expect(response).to be_successful
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
 
     expect(merchant).to have_key(:id)
     expect(merchant[:id]).to be_an(Integer)
@@ -39,14 +39,16 @@ describe "Merchants API" do
 
   it "can get the items for a given merchant ID" do
     merchant = create(:merchant)
+    merchant_2 = create(:merchant)
 
     merchant_items = create_list(:item, 3, merchant: merchant)
+    merchant_items = create_list(:item, 4, merchant: merchant_2)
     
     get "/api/v1/merchants/#{merchant.id}/items"
 
-    items = JSON.parse(response.body, symbolize_names: true)
-
     expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
 
     expect(items.count).to eq(3)
 
