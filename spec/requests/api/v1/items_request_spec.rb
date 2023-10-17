@@ -17,6 +17,7 @@ describe "Items API" do
 
     items[:data].each do |item|
       expect(item).to have_key(:id)
+      expect(item[:type]).to eq("item")
       expect(item[:id]).to be_an(String)
 
       expect(item[:attributes]).to have_key(:name)
@@ -43,20 +44,21 @@ describe "Items API" do
 
     expect(response).to be_successful
 
-    expect(item).to have_key(:id)
-    expect(item[:id]).to be_an(Integer)
+    expect(item[:data]).to have_key(:id)
+    expect(item[:data][:type]).to eq("item")
+    expect(item[:data][:id]).to be_an(String)
 
-    expect(item).to have_key(:name)
-    expect(item[:name]).to be_a(String)
+    expect(item[:data][:attributes]).to have_key(:name)
+    expect(item[:data][:attributes][:name]).to be_a(String)
 
-    expect(item).to have_key(:description)
-    expect(item[:description]).to be_a(String)
+    expect(item[:data][:attributes]).to have_key(:description)
+    expect(item[:data][:attributes][:description]).to be_a(String)
 
-    expect(item).to have_key(:unit_price)
-    expect(item[:unit_price]).to be_a(Float)
+    expect(item[:data][:attributes]).to have_key(:unit_price)
+    expect(item[:data][:attributes][:unit_price]).to be_a(Float)
 
-    expect(item).to have_key(:merchant_id)
-    expect(item[:merchant_id]).to be_an(Integer)
+    expect(item[:data][:attributes]).to have_key(:merchant_id)
+    expect(item[:data][:attributes][:merchant_id]).to be_an(Integer)
   end
   
   it "can create a new item" do
