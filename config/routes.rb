@@ -4,8 +4,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
+  
   namespace :api do
     namespace :v1 do
+      get "/items/find", to: "items_search#show"
+
       resources :merchants, only: [:index, :show] do
         get "/items", to: "merchant_items#index"
       end
