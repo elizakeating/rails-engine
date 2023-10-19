@@ -28,9 +28,13 @@ class Api::V1::ItemsSearchController < ApplicationController
     elsif !params[:max_price].nil?
       query = params[:max_price]
 
-      item = Item.where("unit_price <= ?", query).order("lower(name)").first
+      if query.to_f < 0.00
+        render json: { errors: ["maximum price less than 0"]}, status: 400
+      else
+        item = Item.where("unit_price <= ?", query).order("lower(name)").first
 
-      render json: ItemSerializer.new(item)
+        render json: ItemSerializer.new(item)
+      end
     end
   end
 end
