@@ -153,7 +153,7 @@ describe "Items API" do
     expect(item[:data][:attributes][:unit_price]).to eq(item_1.unit_price)
   end
 
-  it "can get anything higher than the min price searched" do
+  it "can get first item sorted alphabeticaly higher than the min price searched" do
     merchant = create(:merchant)
     item_1 = Item.create!(name: "Hairbrush", description: "a brush to brush your hair", unit_price: 4.99, merchant_id: merchant.id)
     item_2 = Item.create!(name: "Toothbrush", description: "a brush to brush your teeth", unit_price: 10.99, merchant_id: merchant.id)
@@ -172,5 +172,26 @@ describe "Items API" do
     expect(item[:data][:attributes][:name]).to eq(item_5.name)
     expect(item[:data][:attributes][:description]).to eq(item_5.description)
     expect(item[:data][:attributes][:unit_price]).to eq(item_5.unit_price)
+  end
+
+  it "can get first item sorted alphabeticaly less than the max price searched" do
+    merchant = create(:merchant)
+    item_1 = Item.create!(name: "Hairbrush", description: "a brush to brush your hair", unit_price: 4.99, merchant_id: merchant.id)
+    item_2 = Item.create!(name: "Toothbrush", description: "a brush to brush your teeth", unit_price: 10.99, merchant_id: merchant.id)
+    item_3 = Item.create!(name: "How to utilize your brush", description: "a book about utilizing many brushes", unit_price: 15.99, merchant_id: merchant.id)
+    item_4 = Item.create!(name: "Paintbrush", description: "a brush to paint with", unit_price: 20.00, merchant_id: merchant.id)
+    item_5 = Item.create!(name: "hat", description: "wear on your head", unit_price: 25.00, merchant_id: merchant.id)
+
+    get "/api/v1/items/find?max_price=14.25"
+
+    expect(response).to be_successful
+
+    item = JSON.parse(response.body, symbolize_names: true)
+
+    expect(item[:data][:id]).to eq("#{item_1.id}")
+    expect(item[:data][:type]).to eq("item")
+    expect(item[:data][:attributes][:name]).to eq(item_1.name)
+    expect(item[:data][:attributes][:description]).to eq(item_1.description)
+    expect(item[:data][:attributes][:unit_price]).to eq(item_1.unit_price)
   end
 end
