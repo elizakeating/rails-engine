@@ -1,4 +1,4 @@
-class Api::V1::MerchantsSearchController < ApplicationController
+class Api::V1::Merchants::SearchController < ApplicationController
   def show
     query = params[:name]
 

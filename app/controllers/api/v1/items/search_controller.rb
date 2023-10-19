@@ -1,4 +1,4 @@
-class Api::V1::ItemsSearchController < ApplicationController
+class Api::V1::Items::SearchController < ApplicationController
   def show
     if (!params[:min_price].nil? && !params[:name].nil?) || (!params[:max_price].nil? && !params[:name].nil?)
       render status: 400
