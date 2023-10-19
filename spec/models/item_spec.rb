@@ -32,5 +32,16 @@ RSpec.describe Item, type: :model do
         expect(item.unit_price).to eq(@item_1.unit_price)
       end
     end
+
+    describe ".min_price" do
+      it "returns a single item that is more than the max price" do
+        item = Item.min_price(14.25)
+
+        expect(item.id).to eq(@item_5.id)
+        expect(item.name).to eq(@item_5.name)
+        expect(item.description).to eq(@item_5.description)
+        expect(item.unit_price).to eq(@item_5.unit_price)
+      end
+    end
   end
 end
