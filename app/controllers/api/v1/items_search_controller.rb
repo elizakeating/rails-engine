@@ -1,9 +1,17 @@
 class Api::V1::ItemsSearchController < ApplicationController
   def show
-    query = params[:name]
+    if !params[:name].nil?
+      query = params[:name]
 
-    item = Item.where("lower(name) like lower('%#{query}%')").order("name").first
+      item = Item.where("lower(name) like lower('%#{query}%')").order("name").first
     
-    render json: ItemSerializer.new(item)
+      render json: ItemSerializer.new(item)
+    elsif !params[:min_price].nil?
+      query = params[:min_price]
+
+      item = Item.where("unit_price >= ?", query).order("lower(name)").first
+
+      render json: ItemSerializer.new(item)
+    end
   end
 end
