@@ -5,11 +5,7 @@ class Api::V1::Items::SearchController < ApplicationController
     elsif !params[:name].nil?
       query = params[:name]
 
-      item = Item.where("lower(name) like lower('%#{query}%')").order("lower(name)").first
-
-      if item.nil?
-        item = Item.new
-      end
+      item = Item.find_name(query)
       
       render json: ItemSerializer.new(item)
     elsif !params[:min_price].nil? && !params[:max_price].nil?
