@@ -75,4 +75,27 @@ describe "Merchants API" do
       expect(item[:attributes][:merchant_id]).to be_an(Integer)
     end
   end
+
+  it "can get all merchants that match a search term" do
+    merchant_1 = Merchant.create(name: "Ring World")
+    merchant_2 = Merchant.create(name: "Turing")
+    merchant_3 = Merchant.create(name: "Holly's Engagement Rings")
+    merchant_4 = Merchant.create(name: "Ryan's Rollercoasters")
+
+    get "/api/v1/merchants/find_all?name=rINg"
+
+    expect(response).to be_successful
+
+    merchants = JSON.parse(response.body, symbolize_names: true)
+
+    expect(merchants[:data].count).to eq(3)
+
+    expect(merchants[:data].first[:id]).to eq("#{merchant_3.id}")
+    expect(merchants[:data].first[:type]).to eq("merchant")
+    expect(merchants[:data].first[:attributes][:name]).to eq("#{merchant_3.name}")
+
+    expect(merchants[:data].last[:id]).to eq("#{merchant_2.id}")
+    expect(merchants[:data].last[:type]).to eq("merchant")
+    expect(merchants[:data].last[:attributes][:name]).to eq("#{merchant_2.name}")
+  end
 end
