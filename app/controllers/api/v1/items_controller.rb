@@ -17,7 +17,7 @@ class Api::V1::ItemsController < ApplicationController
       item.update(item_params)
       render json: ItemSerializer.new(item)
     rescue ActiveRecord::RecordNotFound => e
-      render status: 400
+      render status: 404
     end
   end
 
