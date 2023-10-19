@@ -16,11 +16,7 @@ class Api::V1::Items::SearchController < ApplicationController
       max_price = params[:max_price]
       min_price = params[:min_price]
 
-      item = Item.where("unit_price >= ? AND unit_price <= ?", min_price, max_price).order("lower(name)").first
-
-      if item.nil?
-        item = Item.new
-      end
+      item = Item.min_and_max(min_price, max_price)
 
       render json: ItemSerializer.new(item)
     elsif !params[:min_price].nil?
