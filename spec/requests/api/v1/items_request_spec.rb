@@ -98,6 +98,15 @@ describe "Items API" do
     expect(item.name).to eq("A brush for hair")
   end
 
+  # it "returns an error if you try to update an item that doesn't exist" do
+  #   headers = {"CONTENT_TYPE" => "application/json"}
+
+  #   patch "/api/v1/items/1", headers: headers, params: JSON.generate({name: "item"})
+
+  #   expect(response).to_not be_successful
+  #   expect(response.status).to eq(400)
+  # end
+
   it "can destroy an item" do
     merchant = create(:merchant)
     item = create(:item, merchant: merchant)
