@@ -12,11 +12,15 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update
-    item = Item.find(params[:id])
-    if item.update(item_params)
-      render json: ItemSerializer.new(item, item_params)
-    else
-      render status: 400
+    begin
+      item = Item.find(params[:id])
+      if !params[:item][:merchant_id].nil?
+        merchant = Merchant.find(params[:item][:merchant_id])
+      end
+      item.update(item_params)
+      render json: ItemSerializer.new(item)
+    rescue ActiveRecord::RecordNotFound => e
+      render status: 404
     end
   end
 
