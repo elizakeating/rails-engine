@@ -15,4 +15,14 @@ class Item < ApplicationRecord
       item
     end
   end
+
+  def self.min_price(query)
+    item = Item.where("unit_price >= ?", query).order("lower(name)").first
+
+    if item.nil?
+      item = Item.new
+    else
+      item
+    end
+  end
 end

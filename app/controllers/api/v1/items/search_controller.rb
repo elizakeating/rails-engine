@@ -29,11 +29,7 @@ class Api::V1::Items::SearchController < ApplicationController
       if query.to_f < 0.00
         render json: { errors: ["minimum price less than 0"]}, status: 400
       else
-        item = Item.where("unit_price >= ?", query).order("lower(name)").first
-
-        if item.nil?
-          item = Item.new
-        end
+        item = Item.min_price(query)
 
         render json: ItemSerializer.new(item)
       end
