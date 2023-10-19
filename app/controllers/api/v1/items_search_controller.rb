@@ -6,13 +6,21 @@ class Api::V1::ItemsSearchController < ApplicationController
       query = params[:name]
 
       item = Item.where("lower(name) like lower('%#{query}%')").order("lower(name)").first
-    
+
+      if item.nil?
+        item = Item.new
+      end
+      
       render json: ItemSerializer.new(item)
     elsif !params[:min_price].nil? && !params[:max_price].nil?
       max_price = params[:max_price]
       min_price = params[:min_price]
 
       item = Item.where("unit_price >= ? AND unit_price <= ?", min_price, max_price).order("lower(name)").first
+
+      if item.nil?
+        item = Item.new
+      end
 
       render json: ItemSerializer.new(item)
     elsif !params[:min_price].nil?
@@ -23,6 +31,10 @@ class Api::V1::ItemsSearchController < ApplicationController
       else
         item = Item.where("unit_price >= ?", query).order("lower(name)").first
 
+        if item.nil?
+          item = Item.new
+        end
+
         render json: ItemSerializer.new(item)
       end
     elsif !params[:max_price].nil?
@@ -32,6 +44,10 @@ class Api::V1::ItemsSearchController < ApplicationController
         render json: { errors: ["maximum price less than 0"]}, status: 400
       else
         item = Item.where("unit_price <= ?", query).order("lower(name)").first
+
+        if item.nil?
+          item = Item.new
+        end
 
         render json: ItemSerializer.new(item)
       end
