@@ -107,6 +107,18 @@ describe "Items API" do
     expect(response.status).to eq(404)
   end
 
+  it "returns an error if you try to update an item with a bad merchant id" do
+    merchant = create(:merchant)
+    item = create(:item, merchant: merchant)
+    item_params = { name: "A brush for hair", merchant_id: 9999999 }
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate({item: item_params})
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+  end
+
   it "can destroy an item" do
     merchant = create(:merchant)
     item = create(:item, merchant: merchant)
