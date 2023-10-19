@@ -142,6 +142,8 @@ describe "Items API" do
 
     get "/api/v1/items/find?name=bRu"
 
+    expect(response).to be_successful
+
     item = JSON.parse(response.body, symbolize_names: true)
 
     expect(item[:data][:id]).to eq("#{item_1.id}")
