@@ -104,7 +104,7 @@ describe "Items API" do
     patch "/api/v1/items/1", headers: headers, params: JSON.generate({name: "item"})
 
     expect(response).to_not be_successful
-    expect(response.status).to eq(400)
+    expect(response.status).to eq(404)
   end
 
   it "can destroy an item" do
