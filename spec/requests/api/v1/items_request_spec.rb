@@ -248,4 +248,23 @@ describe "Items API" do
     expect(error[:errors].count).to eq(1)
     expect(error[:errors].first).to eq("minimum price less than 0")
   end
+
+  it "gives an error if you try to find put a price less than 0" do
+    merchant = create(:merchant)
+    item_1 = Item.create!(name: "Hairbrush", description: "a brush to brush your hair", unit_price: 4.99, merchant_id: merchant.id)
+    item_2 = Item.create!(name: "Toothbrush", description: "a brush to brush your teeth", unit_price: 10.99, merchant_id: merchant.id)
+    item_3 = Item.create!(name: "How to utilize your brush", description: "a book about utilizing many brushes", unit_price: 15.99, merchant_id: merchant.id)
+    item_4 = Item.create!(name: "Paintbrush", description: "a brush to paint with", unit_price: 20.00, merchant_id: merchant.id)
+    item_5 = Item.create!(name: "hat", description: "wear on your head", unit_price: 25.00, merchant_id: merchant.id)
+
+    get "/api/v1/items/find?max_price=-2.00"
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(400)
+
+    error = JSON.parse(response.body, symbolize_names: true)
+
+    expect(error[:errors].count).to eq(1)
+    expect(error[:errors].first).to eq("maximum price less than 0")
+  end
 end
