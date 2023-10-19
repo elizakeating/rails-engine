@@ -14,6 +14,9 @@ class Api::V1::ItemsController < ApplicationController
   def update
     begin
       item = Item.find(params[:id])
+      if !params[:item][:merchant_id].nil?
+        merchant = Merchant.find(params[:item][:merchant_id])
+      end
       item.update(item_params)
       render json: ItemSerializer.new(item)
     rescue ActiveRecord::RecordNotFound => e
